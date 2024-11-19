@@ -2,3 +2,34 @@
 @model IS645Project.Pages.Reservations.IndexModel
 @{
 }
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Room Number</td>
+            <td>Room Type</td>
+            <td>Status</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var room in Model.rooms)
+            {
+                <tr>
+                    <td>@room.roomNumber</td>
+                    <td>@room.roomType</td>
+                    <td>
+                        @if (!@room.isReserved)
+                        {
+                            <a href="" class="btn btn-primary">Book</a>
+                        }
+                        else
+                        {
+                            <a href="" class="btn btn-outline-secondary disabled">Booked</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
