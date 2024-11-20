@@ -1,0 +1,59 @@
+﻿@page
+@model IS645Project.Pages.Account.RegisterModel
+@{
+}
+
+<h2>Register</h2>
+
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+}
+@if (Model.successMessage.Length > 0)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@Model.successMessage</strong>
+        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+}
+<form method="post">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="Email">Email</label>
+        <div class="col-sm-6">
+            <input placeholder="@(!string.IsNullOrEmpty(Model.customer.Email) ? Model.customer.Email : "example@AppDomain.com")" type="text" class="form-control" name="Email" value="@Model.customer.Email" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="FirstName">FirstName</label>
+        <div class="col-sm-6">
+            <input type="text" class = "form-control" name="FirstName" value ="@Model.customer.FirstName" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="LastName">LastName</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="LastName" value="@Model.customer.LastName" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="Password">Password</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" name="Password" value="@Model.password" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="ConfirmPassword">Confirm Password</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" name="Password2" value="@Model.password2" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="offset-sm-3 g-grid">
+            <button type="submit" class="btn btn-primary">Register</button> &nbsp;
+            <button type="submit" class="btn btn-secondary0">Clear</button>
+        </div>
+    </div>
+</form>

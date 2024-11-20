@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace IS645Project.Model
 {
@@ -87,10 +88,63 @@ namespace IS645Project.Model
             return reservations;
         }
         
-        
-        
-        
-        //public bool registerCustomer
+        public Customer GetCustomer(IConfiguration configuration, string email)
+        {
+            Customer customer = new Customer();
+
+
+            using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
+            {
+                string procedure = "GetCustomer";
+                using (var cmd = new SqlCommand(procedure, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            customer.FirstName = reader["Fname"].ToString();
+                            customer.LastName = reader["Lname"].ToString();
+                            customer.Email = reader["Email"].ToString();
+                            // Use dbUsername and dbPassword as needed
+                        }
+                        else
+                        {
+                            // Handle no user found
+                            customer.FirstName = "NotFound";
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            return customer;
+        }
+
+
+        public int registerCustomer(IConfiguration configuration, Customer customer, string password)
+        {
+            int result = 0;
+            using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
+            {
+                string procedure = "CreateCustomer";
+                using (var cmd = new SqlCommand(procedure, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", customer.Email);
+                    cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                    cmd.Parameters.AddWithValue("@Password", password);
+
+                    conn.Open();
+                    result = cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            return result;
+        }
 
     }
 }
