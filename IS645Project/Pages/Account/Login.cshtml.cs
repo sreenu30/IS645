@@ -1,6 +1,8 @@
+using IS645Project.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 
 namespace IS645Project.Pages.Account
@@ -8,47 +10,50 @@ namespace IS645Project.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly IConfiguration _configuration;
-
+        public string successMessage = String.Empty;
+        public string errorMessage = String.Empty;
+        public string email = String.Empty;
+        public string password = String.Empty;
         public LoginModel(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        [BindProperty]
-        public string Username { get; set; }
 
-        [BindProperty]
-        public string Password { get; set; }
-
-        public string Message { get; set; }
-
-        public IActionResult OnPost()
+        public void OnPost()
         {
-            using (var conn = new SqlConnection(_configuration.GetConnectionString("DBCS")))
-            {
-                string query = "SELECT * FROM Users WHERE Username = @Username AND Password = @Password";
-                using (var cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Username", Username);
-                    cmd.Parameters.AddWithValue("@Password", Password); // Hash in production
+            password = Request.Form["Password"];
+            email = Request.Form["Email"];
 
-                    conn.Open();
-                    var reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
+            if (email.Length == 0 || password.Length == 0)
+            {
+                errorMessage = "All Fields are required";
+            }
+            else
+            {
+                using (var conn = new SqlConnection(_configuration.GetConnectionString("DBCS")))
+                {
+                    try
                     {
-                        // Set session or cookie
-                        HttpContext.Session.SetString("Username", Username);
-                        return RedirectToPage("/Index");
+                        DAL dAL = new DAL();
+                        int res = dAL.confirmLoginPassword(_configuration, password, email);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Message = "Invalid username or password";
+                        errorMessage = ex.Message;
+                        return;
                     }
+
+                    // Set session or cookie
+                    HttpContext.Session.SetString("Email", email);
+
+                    password = String.Empty;
+                    email = String.Empty;
+                    successMessage = "You're Logged in";
+                    Response.Redirect("/");
                 }
             }
-
-            return Page();
         }
-    }
 
+    }
 }

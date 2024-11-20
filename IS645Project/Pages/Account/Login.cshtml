@@ -4,18 +4,46 @@
 }
 
 <h2>Login</h2>
-<form method="post">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="Username" required />
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="Password" required />
-    </div>
-    <button type="submit">Login</button>
-</form>
-@if (Model.Message != null)
+
+@if (Model.errorMessage.Length > 0)
 {
-    <p>@Model.Message</p>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>@Model.errorMessage</strong>
+    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+</div>
 }
+@if (Model.successMessage.Length > 0)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@Model.successMessage</strong>
+        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+}
+
+
+<form method="post">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="Email">Email</label>
+        <div class="col-sm-6">
+            <input placeholder="@(!string.IsNullOrEmpty(Model.email) ? Model.email : "example@AppDomain.com")" type="text" class="form-control" name="Email" value="@Model.email" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="Password">Password</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" name="Password" value="@Model.password" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="offset-sm-3 g-grid">
+            <button type="submit" class="btn btn-primary">Login</button> &nbsp;
+            <button type="reset" class="btn btn-secondary0">Clear</button>
+        </div>
+    </div>
+</form>
+
+<div class="row mb-3">
+    <div class="offset-sm-3 g-grid">
+        <a asp-page="/Account/Register" class="btn btn-link">Register</a>
+    </div>
+</div>
