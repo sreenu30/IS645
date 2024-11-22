@@ -1,0 +1,28 @@
+﻿@page
+@model IS645Project.Pages.Reservations.MyReservationsModel
+@{
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Room Number</td>
+            <td>Room Type</td>
+            <td>Check-In Date</td>
+            <td>Check-Out Date</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var reservation in Model.reservations)
+            {
+                <tr>
+                    <td>@reservation.RoomNumber</td>
+                    <td>Figuring it out</td>
+                    <td>@reservation.CheckInDate</td>
+                    <td>@reservation.CheckOutDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

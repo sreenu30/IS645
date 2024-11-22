@@ -21,7 +21,8 @@
                     <td>
                         @if (!@room.isReserved)
                         {
-                            <a href="" class="btn btn-primary">Book</a>
+
+                            <a asp-page-handler="Book" asp-route-roomNumber="@room.roomNumber" asp-route-roomType="@room.roomType" class="btn btn-primary">Book</a>
                         }
                         else
                         {

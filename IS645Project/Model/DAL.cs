@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Configuration;
 
 namespace IS645Project.Model
 {
@@ -73,7 +74,7 @@ namespace IS645Project.Model
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         Reservation r = new Reservation();
-                        r.Email = Convert.ToString(dt.Rows[i]["CustomerID"]);
+                        r.Email = Convert.ToString(dt.Rows[i]["Email"]);
                         r.RoomNumber = (int)Convert.ToInt64(dt.Rows[i]["RoomNumber"]);
                         r.CheckInDate = Convert.ToString(dt.Rows[i]["CheckInDate"]);
                         r.CheckOutDate = Convert.ToString(dt.Rows[i]["CheckOutDate"]);
@@ -123,7 +124,60 @@ namespace IS645Project.Model
             return customer;
         }
 
+        public int createReservation(IConfiguration configuration, Reservation reservation)
+        {
+            int result = 0;
+            using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
+            {
+                string procedure = "CreateReservation";
+                using (var cmd = new SqlCommand(procedure, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", reservation.Email);
+                    cmd.Parameters.AddWithValue("@RoomNumber", reservation.RoomNumber);
+                    cmd.Parameters.AddWithValue("@CheckInDate", reservation.CheckInDate);
+                    cmd.Parameters.AddWithValue("@CheckOutDate", reservation.CheckOutDate);
 
+                    conn.Open();
+                    result = cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        public List<Reservation> GetCustomerReservations(IConfiguration configuration, String email)
+        {
+            List<Reservation> reservations = new List<Reservation>();
+
+            using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
+            {
+                string procedure = "GetCustomerReservations";
+                SqlDataAdapter da = new SqlDataAdapter(procedure, conn);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.AddWithValue("@Email", email);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Reservation r = new Reservation();
+                        r.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                        r.RoomNumber = (int)Convert.ToInt64(dt.Rows[i]["RoomNumber"]);
+                        r.CheckInDate = Convert.ToString(dt.Rows[i]["CheckInDate"]);
+                        r.CheckOutDate = Convert.ToString(dt.Rows[i]["CheckOutDate"]);
+
+
+                        reservations.Add(r);
+                    }
+                }
+            }
+
+
+            return reservations;
+        }
         public int registerCustomer(IConfiguration configuration, Customer customer, string password)
         {
             int result = 0;

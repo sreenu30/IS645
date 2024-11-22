@@ -1,0 +1,36 @@
+﻿@page
+@model IS645Project.Pages.Reservations.BookModel
+@{
+}
+
+<h2>You are attempting to book room @Model.roomNumber</h2>
+<h3>Please enter the following details to complete your reservation</h3>
+
+
+<form method="post">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="CheckIn">Check-In Date</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="CheckIn" value="@Model.checkIn" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="CheckOut">Check-In Date</label>
+        <div class="col-sm-6">
+            <input type="date" class="form-control" name="CheckOut" value="@Model.checkOut" required />
+        </div>
+    </div>
+    @if (Model.errorMessage.Length > 0)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>@Model.errorMessage</strong>
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+    }
+    <div class="row mb-3">
+        <div class="offset-sm-3 g-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+           
+        </div>
+    </div>
+</form>
