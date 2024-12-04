@@ -14,13 +14,13 @@
     </thead>
     <tbody>
         @{
-            foreach (var reservation in Model.reservations)
+            for(int i =0; i< Model.reservations.Count; i++)
             {
                 <tr>
-                    <td>@reservation.RoomNumber</td>
-                    <td>Figuring it out</td>
-                    <td>@reservation.CheckInDate</td>
-                    <td>@reservation.CheckOutDate</td>
+                    <td>@Model.reservations[i].RoomNumber</td>
+                    <td>@Model.roomTypes[i]</td>
+                    <td>@Model.reservations[i].CheckInDate</td>
+                    <td>@Model.reservations[i].CheckOutDate</td>
                 </tr>
             }
         }

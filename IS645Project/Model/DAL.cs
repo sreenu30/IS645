@@ -124,6 +124,39 @@ namespace IS645Project.Model
             return customer;
         }
 
+        public Room GetRoom(IConfiguration configuration, int roomNumber)
+        {
+            Room room = new Room();
+
+            using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
+            {
+                string procedure = "Motel.GetRoom";
+                using (var cmd = new SqlCommand(procedure, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RoomNumber", roomNumber);
+
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            room.roomNumber = Int32.Parse(reader["RoomNumber"].ToString());
+                            room.roomType = reader["RoomType"].ToString();
+                            // Use dbUsername and dbPassword as needed
+                        }
+                        else
+                        {
+                            // Handle no room found
+                            room.roomNumber = 0;
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            return room;
+        }
+
         public int createReservation(IConfiguration configuration, Reservation reservation)
         {
             int result = 0;
