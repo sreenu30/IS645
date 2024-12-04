@@ -15,7 +15,7 @@ namespace IS645Project.Model
             {
                 using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
                 {
-                    string procedure = "SelectAllRooms";
+                    string procedure = "Motel.SelectAllRooms";
                     SqlDataAdapter da = new SqlDataAdapter(procedure, conn);
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
@@ -62,7 +62,7 @@ namespace IS645Project.Model
 
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "GetReservations";
+                string procedure = "Motel.GetReservations";
                 SqlDataAdapter da = new SqlDataAdapter(procedure, conn);
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
@@ -96,7 +96,7 @@ namespace IS645Project.Model
 
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "GetCustomer";
+                string procedure = "Motel.GetCustomer";
                 using (var cmd = new SqlCommand(procedure, conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -129,7 +129,7 @@ namespace IS645Project.Model
             int result = 0;
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "CreateReservation";
+                string procedure = "Motel.CreateReservation";
                 using (var cmd = new SqlCommand(procedure, conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -152,7 +152,7 @@ namespace IS645Project.Model
 
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "GetCustomerReservations";
+                string procedure = "Motel.GetCustomerReservations";
                 SqlDataAdapter da = new SqlDataAdapter(procedure, conn);
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 da.SelectCommand.Parameters.AddWithValue("@Email", email);
@@ -183,7 +183,7 @@ namespace IS645Project.Model
             int result = 0;
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "CreateCustomer";
+                string procedure = "Motel.CreateCustomer";
                 using (var cmd = new SqlCommand(procedure, conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -207,7 +207,7 @@ namespace IS645Project.Model
 
             using (SqlConnection conn = new SqlConnection(configuration.GetConnectionString("DBCS").ToString()))
             {
-                string procedure = "GetCustomerPassword";
+                string procedure = "Motel.GetCustomerPassword";
 
                 using (var cmd = new SqlCommand(procedure, conn))
                 {
